@@ -9,7 +9,7 @@ class Grammar
   private $initialState = "";
 
   /**
-   * [addState description]
+   * Add a new state to the grammar
    * @param State $state
    */
   public function addState($state) {
@@ -18,7 +18,7 @@ class Grammar
   }
 
   /**
-   * [nextState description]
+   * Move the grammar into the next state
    * @param  char  $char
    * @param  boolean $isLastChar
    * @return boolean
@@ -42,17 +42,23 @@ class Grammar
   }
 
   /**
-   * [can description]
+   * Check if a word is part of the grammar
    * @param  string $string
-   * @return boolean    
+   * @return boolean
    */
   public function can($string) {
+    $this->reset();
     $ok = true;
     for($i = 0; $i < strlen($string) && $ok; $i++) {
       $ok = $this->nextState($string[$i], ($i+1 == strlen($string) ? true : false) );
-      print_r($this->currentState); print "$ok <br />";
     }
     if($ok) return true;
     return false;
+  }
+  /**
+   * Reset the grammar to accept a new input
+   */
+  private function reset() {
+    $this->currentState = $this->initialState;
   }
 }

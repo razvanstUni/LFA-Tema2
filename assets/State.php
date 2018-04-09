@@ -7,7 +7,6 @@ class State
   private $name;
   private $path = array();
   /**
-   * [__construct description]
    * @param string $name State label
    * @param array $path
    */
@@ -17,7 +16,7 @@ class State
     $this->path = $path;
   }
   /**
-   * [getName description]
+   * Get the label of the state
    * @return string
    */
   public function getName() {
