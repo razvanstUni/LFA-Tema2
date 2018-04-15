@@ -9,6 +9,17 @@ class Grammar
   private $initialState = "";
 
   /**
+   * Set the grammar
+   * @param array $states
+   */
+  function __construct($states) {
+    if(!isset($states) || empty($states)) return;
+    foreach ($states as $state) {
+      $this->addState( new State($state->name, $state->path) );
+    }
+  }
+
+  /**
    * Add a new state to the grammar
    * @param State $state
    */
@@ -46,11 +57,22 @@ class Grammar
    * @param  string $string
    * @return boolean
    */
-  public function can($string) {
-    $this->reset();
+  public function can($string, $doReset = true) {
+    if($doReset) $this->reset();
     $ok = true;
     for($i = 0; $i < strlen($string) && $ok; $i++) {
-      $ok = $this->nextState($string[$i], ($i+1 == strlen($string) ? true : false) );
+      $hasMultiplePaths = $this->states[ $this->currentState ]->hasMultiplePaths( $string[ $i ] );
+      if( $hasMultiplePaths === false )
+        $ok = $this->nextState($string[$i], ($i+1 == strlen($string) ? true : false) );
+      else {
+        foreach ($hasMultiplePaths as $path) {
+          $grammar = clone $this;
+          $grammar->setCurrentState( $path[1] );
+          $ok = $grammar->can( substr($string, $i+1), false );
+          if( $ok ) return true;
+        }
+        return false;
+      }
     }
     if($ok) return true;
     return false;
@@ -60,5 +82,12 @@ class Grammar
    */
   private function reset() {
     $this->currentState = $this->initialState;
+  }
+  /**
+   * [setCurrentState description]
+   * @param char $state 
+   */
+  public function setCurrentState( $state ) {
+    $this->currentState = $state;
   }
 }

@@ -1,0 +1,13 @@
+{
+"words":["ab", "ac", "b", "bcc", "abbc"],
+"states":[
+{
+"name": "S",
+"path": ["aS", "bA", "aA"]
+},
+{
+"name": "A",
+"path": ["0", "cA"]
+}
+]
+}

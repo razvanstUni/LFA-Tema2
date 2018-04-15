@@ -29,4 +29,18 @@ class State
   public function getPath() {
     return $this->path;
   }
+
+  /**
+   * [hasMultiplePaths description]
+   * @param  char  $char
+   * @return mixt returns false or array
+   */
+  public function hasMultiplePaths($char) {
+    $letters = array();
+    foreach ($this->path as $letter) {
+      if( $letter[0] == $char && strlen($letter) == 2 ) $letters[] = $letter;
+    }
+    if( count($letters) <= 1 ) return false;
+    else return $letters;
+  }
 }
